@@ -5,14 +5,22 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Code checked out from GitHub'
+                git branch: 'main',
+                    url: 'https://github.com/mohankumarreddycareer-afk/aws.git'
             }
         }
 
-        stage('Build') {
+        stage('SonarQube Analysis') {
             steps {
-                echo 'Build stage running'
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=aws \
+                          -Dsonar.sources=.
+                    '''
+                }
             }
         }
     }
 }
+

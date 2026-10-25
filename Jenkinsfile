@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -13,11 +12,17 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarScanner'
+                    def scannerHome = tool(
+                        name: 'SonarScanner',
+                        type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    )
 
                     withSonarQubeEnv('Sonarqube') {
                         sh """
-                            "\${scannerHome}/bin/sonar-scanner" \
+                            set -e
+                            echo "Scanner location: ${scannerHome}"
+                            ls -l "${scannerHome}/bin/sonar-scanner"
+                            "${scannerHome}/bin/sonar-scanner" \
                               -Dsonar.projectKey=aws \
                               -Dsonar.projectName=AWS \
                               -Dsonar.sources=. \

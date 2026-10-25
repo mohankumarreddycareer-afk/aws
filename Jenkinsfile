@@ -1,6 +1,10 @@
-
+```groovy
 pipeline {
     agent any
+
+    tools {
+        sonarQubeScanner 'SonarScanner'
+    }
 
     stages {
         stage('Checkout') {
@@ -12,16 +16,17 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('Sonarqube') {
                     sh '''
                         sonar-scanner \
                           -Dsonar.projectKey=aws \
                           -Dsonar.projectName=AWS \
-                          -Dsonar.sources=.
+                          -Dsonar.sources=. \
+                          -Dsonar.exclusions=.git/**
                     '''
                 }
             }
         }
     }
 }
-
+```

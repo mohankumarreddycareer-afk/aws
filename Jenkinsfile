@@ -16,6 +16,7 @@ pipeline {
                     sh '''
                         sonar-scanner \
                           -Dsonar.projectKey=aws \
+                          -Dsonar.projectName=AWS \
                           -Dsonar.sources=.
                     '''
                 }

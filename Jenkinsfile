@@ -2,10 +2,6 @@
 pipeline {
     agent any
 
-    tools {
-        sonarQubeScanner 'SonarScanner'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -16,16 +12,21 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonarqube') {
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=aws \
-                          -Dsonar.projectName=AWS \
-                          -Dsonar.sources=. \
-                          -Dsonar.exclusions=.git/**
-                    '''
+                script {
+                    def scannerHome = tool 'SonarScanner'
+
+                    withSonarQubeEnv('Sonarqube') {
+                        sh """
+                            "\${scannerHome}/bin/sonar-scanner" \
+                              -Dsonar.projectKey=aws \
+                              -Dsonar.projectName=AWS \
+                              -Dsonar.sources=. \
+                              -Dsonar.exclusions=.git/**
+                        """
+                    }
                 }
             }
         }
     }
 }
+

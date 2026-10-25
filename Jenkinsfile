@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -15,7 +14,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarScanner'
 
-                    withSonarQubeEnv('Sonarqube') {
+                    withSonarQubeEnv('SonarQube') {
                         sh """
                             "\${scannerHome}/bin/sonar-scanner" \
                               -Dsonar.projectKey=aws \
@@ -29,4 +28,3 @@ pipeline {
         }
     }
 }
-
